@@ -1,23 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import DividerDesktop from './images/pattern-divider-desktop.svg'
+import DividerMobile from './images/pattern-divider-mobile.svg'
+import IconDice from './images/icon-dice.svg'
+import React, { useEffect, useState } from 'react'
 
 function App() {
+
+  const [ advices, setAdvices ] = useState([])
+
+  const getAdvice = () => {
+    fetch("https://api.adviceslip.com/advice")
+    .then(response => response.json())
+    .then(data => setAdvices(data))
+    .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    getAdvice()
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="advice">
+
+        <div>
+          <p>ADVICE #{advices?.slip?.id}</p>  
+          <h1>{advices?.slip?.advice}</h1>
+        </div>
+        
+        <img src={DividerDesktop} alt="#" id='divider-desktop'/>
+        <img src={DividerMobile} alt="#" id='divider-mobile'/>
+        <button onClick={getAdvice}><img src={IconDice} alt="#" /></button>
+      </div>
     </div>
   );
 }
